@@ -8,7 +8,7 @@
 extern crate alloc;
 
 mod data;
-pub use data::{Hitokoto, HitokotoType};
+pub use data::{Hitokoto, HitokotoType, HitokotoCommitFrom};
 #[cfg(feature = "language")]
 pub use data::Language;
 

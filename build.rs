@@ -5,7 +5,7 @@ async fn main() -> anyhow::Result<()> {
     let out_dir = std::env::var("OUT_DIR")?;
 
     // https://sentences-bundle.hitokoto.cn/categories.json
-    tokio::try_join!(
+    let (a, b, c, d, e, f, g, h, i, j, k, l) = tokio::try_join!(
         handle_hitokoto(&base_url, &out_dir, 'a', "Anime - 动画"),
         handle_hitokoto(&base_url, &out_dir, 'b', "Comic - 漫画"),
         handle_hitokoto(&base_url, &out_dir, 'c', "Game - 游戏"),
@@ -19,6 +19,9 @@ async fn main() -> anyhow::Result<()> {
         handle_hitokoto(&base_url, &out_dir, 'k', "Philosophy - 哲学"),
         handle_hitokoto(&base_url, &out_dir, 'l', "Funny - 抖机灵"),
     )?;
+    if a || b || c || d || e || f || g || h || i || j || k || l {
+        println!("cargo:warning=If you see any warning, please report this bug to https://github.com/xuxiaocheng0201/hitokoto/ .");
+    }
 
     Ok(())
 }
@@ -39,7 +42,7 @@ pub struct Hitokoto {
     pub created_at: String,
 }
 
-async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category_doc: &str) -> anyhow::Result<()> {
+async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category_doc: &str) -> anyhow::Result<bool> {
     let list = if option_env!("DOCS_RS") != Some("1") {
         use anyhow::Context;
         let url = format!("{base_url}/sentences/{category}.json");
@@ -50,10 +53,11 @@ async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category
         Vec::new()
     };
     let mut rust = format!("\
-        /// {category_doc}
-        ///
-        /// From: <https://sentences-bundle.hitokoto.cn/sentences/{category}.json>
-        pub static HITOKOTOS_{}: &[Hitokoto] = &[", category.to_ascii_uppercase()
+/// {category_doc}
+///
+/// From: <https://sentences-bundle.hitokoto.cn/sentences/{category}.json>
+pub static HITOKOTOS_{}: &[Hitokoto] = &[
+", category.to_ascii_uppercase()
     );
 
     #[cfg(not(feature = "language"))]
@@ -68,8 +72,9 @@ async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category
     #[cfg(feature = "language")]
     let iter = list.0.into_iter().zip(list.1);
 
+    let mut error = false;
     for (hitokoto, language) in iter {
-        rust.push_str("Hitokoto {");
+        rust.push_str("    Hitokoto {");
         rust.push_str(&format!("id: {},", hitokoto.id));
 
         rust.push_str(r##"#[cfg(feature = "uuid")]"##);
@@ -95,6 +100,7 @@ async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category
             'l' => "Funny",
             t @ _ => {
                 println!("cargo:warning=Unknown hitokoto type in category {category}, type={t}.");
+                error = true;
                 "Anime"
             },
         }));
@@ -112,7 +118,16 @@ async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category
 
         rust.push_str(&format!("reviewer: {},", hitokoto.reviewer));
 
-        rust.push_str(&format!("commit_from: Cow::Borrowed({:?}),", hitokoto.commit_from));
+        rust.push_str(&format!("commit_from: HitokotoCommitFrom::{},", match hitokoto.commit_from.as_str() {
+            "web" => "Web",
+            "api" => "Api",
+            "app" => "App",
+            f @ _ => {
+                println!("cargo:warning=Unknown hitokoto commit_from in category {category}, commit_from={f}.");
+                error = true;
+                "Web"
+            }
+        }));
 
         rust.push_str(r##"#[cfg(feature = "time")]"##);
         rust.push_str(&format!(
@@ -124,6 +139,7 @@ async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category
                 },
                 Err(_) => {
                     println!("cargo:warning=Unknown hitokoto created_at in category {category}, created_at={}.", hitokoto.created_at);
+                    error = true;
                     0
                 },
             }
@@ -138,6 +154,7 @@ async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category
                 Some(language) => format!("{language:?}"),
                 None => {
                     println!("cargo:warning=Unknown hitokoto language in category {category}, hitokoto={:?}.", hitokoto.hitokoto);
+                    error = true;
                     "Chinese".to_string()
                 },
             }
@@ -148,5 +165,5 @@ async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category
     rust.push_str("];");
     let file_path = format!("{out_dir}/sentences_{category}.rs");
     tokio::fs::write(&file_path, rust.as_bytes()).await?;
-    Ok(())
+    Ok(error)
 }

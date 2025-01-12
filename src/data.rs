@@ -55,7 +55,7 @@ pub struct Hitokoto {
     /// 审核员标识
     pub reviewer: u32,
     /// 提交方式
-    pub commit_from: Cow<'static, str>,
+    pub commit_from: HitokotoCommitFrom,
     /// 添加时间
     #[cfg(feature = "time")]
     #[cfg_attr(docsrs, doc(cfg(feature = "time")))]
@@ -64,6 +64,17 @@ pub struct Hitokoto {
     #[cfg(feature = "language")]
     #[cfg_attr(docsrs, doc(cfg(feature = "language")))]
     pub language: Language,
+}
+
+/// Where the hitokoto commit from.
+///
+/// Currently (hitokoto sentences v1.0.399), only this three versions.
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum HitokotoCommitFrom {
+    Web,
+    Api,
+    App,
 }
 
 /// This is a copy from [lingua Language](https://docs.rs/lingua/%5E1.6/lingua/enum.Language.html).

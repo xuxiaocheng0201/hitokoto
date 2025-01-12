@@ -2,7 +2,7 @@
 #![allow(unused_imports)]
 
 use alloc::borrow::Cow;
-use crate::{Hitokoto, HitokotoType};
+use crate::{Hitokoto, HitokotoType, HitokotoCommitFrom};
 #[cfg(feature = "language")]
 use crate::Language;
 
