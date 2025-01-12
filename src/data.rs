@@ -72,8 +72,11 @@ pub struct Hitokoto {
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum HitokotoCommitFrom {
+    /// web
     Web,
+    /// api
     Api,
+    /// app
     App,
 }
 
