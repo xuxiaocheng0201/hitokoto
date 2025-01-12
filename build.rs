@@ -51,7 +51,7 @@ async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category
     let mut rust = format!("\
         /// {category_doc}
         ///
-        /// From: https://sentences-bundle.hitokoto.cn/sentences/{category}.json
+        /// From: <https://sentences-bundle.hitokoto.cn/sentences/{category}.json>
         pub static HITOKOTOS_{}: &[Hitokoto] = &[", category.to_ascii_uppercase()
     );
     for hitokoto in list {

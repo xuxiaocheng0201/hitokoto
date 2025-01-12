@@ -68,7 +68,7 @@ fn generate_random(total: usize) -> usize {
     rand::Rng::gen_range(&mut random, 0..total)
 }
 
-/// This is equivalent to requesting 'https://v1.hitokoto.cn/?c='
+/// This is equivalent to requesting '<https://v1.hitokoto.cn/?c=>'
 ///
 /// # Panic
 /// If `types` is empty, this function will panic.
