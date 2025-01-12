@@ -23,38 +23,31 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-#[cfg(docsrs)] // This is for building on docs.rs with no web requests.
-async fn handle_hitokoto(_base_url: &str, out_dir: &str, category: char, category_doc: &str) -> anyhow::Result<()> {
-    let rust = format!("\
-        /// {category_doc}
-        pub static HITOKOTOS_{}: &[Hitokoto] = &[];", category.to_ascii_uppercase()
-    );
-    let file_path = format!("{out_dir}/sentences_{category}.rs");
-    tokio::fs::write(&file_path, rust.as_bytes()).await?;
-    Ok(())
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
+pub struct Hitokoto {
+    pub id: u32,
+    pub uuid: uuid::Uuid,
+    pub hitokoto: String,
+    #[serde(rename = "type")]
+    pub r#type: char,
+    pub from: String,
+    pub from_who: Option<String>,
+    pub creator: String,
+    pub creator_uid: u32,
+    pub reviewer: u32,
+    pub commit_from: String,
+    pub created_at: String,
 }
 
-#[cfg(not(docsrs))]
 async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category_doc: &str) -> anyhow::Result<()> {
-    use anyhow::Context;
-    #[derive(Debug, serde::Serialize, serde::Deserialize)]
-    pub struct Hitokoto {
-        pub id: u32,
-        pub uuid: uuid::Uuid,
-        pub hitokoto: String,
-        #[serde(rename = "type")]
-        pub r#type: char,
-        pub from: String,
-        pub from_who: Option<String>,
-        pub creator: String,
-        pub creator_uid: u32,
-        pub reviewer: u32,
-        pub commit_from: String,
-        pub created_at: String,
-    }
-
-    let url = format!("{base_url}/sentences/{category}.json");
-    let list = reqwest::get(url).await?.json::<Vec<Hitokoto>>().await.context(format!("decode {category}"))?;
+   let list = if option_env!("DOCS_RS") != Some("1") {
+        use anyhow::Context;
+        let url = format!("{base_url}/sentences/{category}.json");
+        reqwest::get(url).await?.json::<Vec<Hitokoto>>().await.context(format!("decode {category}"))?
+    } else {
+        // This is for building on docs.rs with no web requests.
+        Vec::new()
+    };
     let mut rust = format!("\
         /// {category_doc}
         ///

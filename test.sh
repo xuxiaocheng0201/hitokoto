@@ -1,11 +1,11 @@
-cargo build --no-default-features
-cargo build --no-default-features --features uuid
-cargo build --no-default-features --features serde
-cargo build --no-default-features --features random
-cargo build --no-default-features --features std
-cargo build --no-default-features --features std,uuid
-cargo build --no-default-features --features std,serde
-cargo build --no-default-features --features std,random
-cargo build --no-default-features --features std,uuid,serde,random
+DOCS_RS=1 cargo build --no-default-features
+DOCS_RS=1 cargo build --no-default-features --features uuid
+DOCS_RS=1 cargo build --no-default-features --features serde
+DOCS_RS=1 cargo build --no-default-features --features random
+DOCS_RS=1 cargo build --no-default-features --features std
+DOCS_RS=1 cargo build --no-default-features --features std,uuid
+DOCS_RS=1 cargo build --no-default-features --features std,serde
+DOCS_RS=1 cargo build --no-default-features --features std,random
+DOCS_RS=1 cargo build --no-default-features --features std,uuid,serde,random
 
-cargo test --features std,uuid,serde,random
+DOCS_RS=1 cargo test --features std,uuid,serde,random
