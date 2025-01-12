@@ -57,5 +57,7 @@ pub struct Hitokoto {
     /// 提交方式
     pub commit_from: Cow<'static, str>,
     /// 添加时间
-    pub created_at: u64,
+    #[cfg(feature = "time")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "time")))]
+    pub created_at: chrono::DateTime<chrono::Utc>,
 }

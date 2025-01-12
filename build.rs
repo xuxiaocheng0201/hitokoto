@@ -68,7 +68,8 @@ async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category
                 creator_uid: {},
                 reviewer: {},
                 commit_from: Cow::Borrowed({:?}),
-                created_at: {},
+                #[cfg(feature = "time")]
+                created_at: chrono::DateTime::<chrono::Utc>::from_timestamp_nanos({}),
             }},
         "##,
             hitokoto.id,
@@ -101,7 +102,16 @@ async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category
             hitokoto.creator_uid,
             hitokoto.reviewer,
             hitokoto.commit_from,
-            hitokoto.created_at,
+            match <i64 as std::str::FromStr>::from_str(&hitokoto.created_at) {
+                Ok(time) => match time.checked_mul(1_000_000_000) {
+                    Some(time) => time, // Sometimes, the timestamp is in seconds.
+                    None => time * 1_000_000, // Sometimes, the timestamp is in milliseconds.
+                },
+                Err(_) => {
+                    println!("cargo:warning=Unknown hitokoto created_at in category {category}, created_at={}.", hitokoto.created_at);
+                    0
+                },
+            },
         ));
     }
     rust.push_str("];");
