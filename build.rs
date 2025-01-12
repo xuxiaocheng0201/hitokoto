@@ -40,12 +40,13 @@ pub struct Hitokoto {
 }
 
 async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category_doc: &str) -> anyhow::Result<()> {
-   let list = if option_env!("DOCS_RS") != Some("1") {
+    let list = if option_env!("DOCS_RS") != Some("1") {
         use anyhow::Context;
         let url = format!("{base_url}/sentences/{category}.json");
         reqwest::get(url).await?.json::<Vec<Hitokoto>>().await.context(format!("decode {category}"))?
     } else {
         // This is for building on docs.rs with no web requests.
+        println!("cargo:rerun-if-env-changed=DOCS_RS");
         Vec::new()
     };
     let mut rust = format!("\
