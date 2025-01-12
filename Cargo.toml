@@ -27,3 +27,7 @@ default = ["random"]
 uuid = ["dep:uuid"]
 serde = ["dep:serde", "uuid?/serde"]
 random = ["dep:rand", "dep:bitflags"]
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
