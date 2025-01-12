@@ -1,4 +1,6 @@
 #![doc = include_str!("../README.md")]
+#![cfg_attr(docsrs, feature(doc_cfg))]
+
 #![no_std]
 #![forbid(unsafe_code)]
 #![deny(missing_docs)]

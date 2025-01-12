@@ -108,6 +108,7 @@ pub fn random_hitokoto(types: HitokotoTypes) -> Hitokoto {
 /// This is an optional version for [random_hitokoto], with no panic.
 /// If the types is empty, it will return None.
 #[inline]
+#[cfg_attr(docsrs, doc(cfg(feature = "random")))]
 pub fn random_hitokoto_option(types: HitokotoTypes) -> Option<Hitokoto> {
     if types.is_empty() { return None; }
     Some(random_hitokoto(types))

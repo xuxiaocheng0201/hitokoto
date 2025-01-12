@@ -38,6 +38,7 @@ pub struct Hitokoto {
     pub id: u32,
     /// 一言唯一标识
     #[cfg(feature = "uuid")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "uuid")))]
     pub uuid: uuid::Uuid,
     /// 一言正文
     pub hitokoto: Cow<'static, str>,
