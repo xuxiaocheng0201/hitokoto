@@ -21,7 +21,7 @@ pub enum HitokotoType {
     Video,
     /// 诗词。主要收录中国古代文学，如：诗、歌、词、赋、曲等。
     Poem,
-    /// 网易云。主要收录网易云音乐热
+    /// 网易云。主要收录网易云音乐热评。
     NCM,
     /// 哲学
     Philosophy,

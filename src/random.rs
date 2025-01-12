@@ -21,7 +21,7 @@ bitflags::bitflags! {
         const Video = 1 << 7;
         /// 诗词。主要收录中国古代文学，如：诗、歌、词、赋、曲等。
         const Poem = 1 << 8;
-        /// 网易云。主要收录网易云音乐热
+        /// 网易云。主要收录网易云音乐热评。
         const NCM = 1 << 9;
         /// 哲学
         const Philosophy = 1 << 10;
