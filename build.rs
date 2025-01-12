@@ -55,54 +55,68 @@ async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category
         /// From: <https://sentences-bundle.hitokoto.cn/sentences/{category}.json>
         pub static HITOKOTOS_{}: &[Hitokoto] = &[", category.to_ascii_uppercase()
     );
-    for hitokoto in list {
-        rust.push_str(&format!(r##"
-            Hitokoto {{
-                id: {},
-                #[cfg(feature = "uuid")]
-                uuid: uuid::Uuid::from_bytes([{}]),
-                hitokoto: Cow::Borrowed({:?}),
-                r#type: HitokotoType::{},
-                from: Cow::Borrowed({:?}),
-                from_who: {},
-                creator: Cow::Borrowed({:?}),
-                creator_uid: {},
-                reviewer: {},
-                commit_from: Cow::Borrowed({:?}),
-                #[cfg(feature = "time")]
-                created_at: chrono::DateTime::<chrono::Utc>::from_timestamp_nanos({}),
-            }},
-        "##,
-            hitokoto.id,
-            hitokoto.uuid.as_bytes().map(|a| a.to_string()).join(", "),
-            hitokoto.hitokoto,
-            match hitokoto.r#type {
-                'a' => "Anime",
-                'b' => "Comic",
-                'c' => "Game",
-                'd' => "Literature",
-                'e' => "Original",
-                'f' => "Internet",
-                'g' => "Other",
-                'h' => "Video",
-                'i' => "Poem",
-                'j' => "NCM",
-                'k' => "Philosophy",
-                'l' => "Funny",
-                t @ _ => {
-                    println!("cargo:warning=Unknown hitokoto type in category {category}, type={t}.");
-                    "Anime"
-                },
+
+    #[cfg(not(feature = "language"))]
+    let iter = list.into_iter().map(|hitokoto| (hitokoto, None::<()>));
+    #[cfg(feature = "language")]
+    let list = tokio::task::spawn_blocking(move || {
+        let detector = lingua::LanguageDetectorBuilder::from_all_languages().build();
+        let texts = list.iter().map(|hitokoto| hitokoto.hitokoto.as_str()).collect::<Vec<_>>();
+        let languages = detector.detect_languages_in_parallel_of(&texts);
+        (list, languages)
+    }).await?;
+    #[cfg(feature = "language")]
+    let iter = list.0.into_iter().zip(list.1);
+
+    for (hitokoto, language) in iter {
+        rust.push_str("Hitokoto {");
+        rust.push_str(&format!("id: {},", hitokoto.id));
+
+        rust.push_str(r##"#[cfg(feature = "uuid")]"##);
+        rust.push_str(&format!(
+            "uuid: uuid::Uuid::from_bytes([{}]),",
+            hitokoto.uuid.as_bytes().map(|a| a.to_string()).join(", ")
+        ));
+
+        rust.push_str(&format!("hitokoto: Cow::Borrowed({:?}),", hitokoto.hitokoto));
+
+        rust.push_str(&format!("r#type: HitokotoType::{},", match hitokoto.r#type {
+            'a' => "Anime",
+            'b' => "Comic",
+            'c' => "Game",
+            'd' => "Literature",
+            'e' => "Original",
+            'f' => "Internet",
+            'g' => "Other",
+            'h' => "Video",
+            'i' => "Poem",
+            'j' => "NCM",
+            'k' => "Philosophy",
+            'l' => "Funny",
+            t @ _ => {
+                println!("cargo:warning=Unknown hitokoto type in category {category}, type={t}.");
+                "Anime"
             },
-            hitokoto.from,
-            match hitokoto.from_who {
-                None => "None".to_string(),
-                Some(from_who) => format!(r#"Some(Cow::Borrowed({:?}))"#, from_who),
-            },
-            hitokoto.creator,
-            hitokoto.creator_uid,
-            hitokoto.reviewer,
-            hitokoto.commit_from,
+        }));
+
+        rust.push_str(&format!("from: Cow::Borrowed({:?}),", hitokoto.from));
+
+        rust.push_str(&format!("from_who: {},", match hitokoto.from_who {
+            None => "None".to_string(),
+            Some(from_who) => format!(r#"Some(Cow::Borrowed({:?}))"#, from_who),
+        }));
+
+        rust.push_str(&format!("creator: Cow::Borrowed({:?}),", hitokoto.creator));
+
+        rust.push_str(&format!("creator_uid: {},", hitokoto.creator_uid));
+
+        rust.push_str(&format!("reviewer: {},", hitokoto.reviewer));
+
+        rust.push_str(&format!("commit_from: Cow::Borrowed({:?}),", hitokoto.commit_from));
+
+        rust.push_str(r##"#[cfg(feature = "time")]"##);
+        rust.push_str(&format!(
+            "created_at: chrono::DateTime::<chrono::Utc>::from_timestamp_nanos({}),",
             match <i64 as std::str::FromStr>::from_str(&hitokoto.created_at) {
                 Ok(time) => match time.checked_mul(1_000_000_000) {
                     Some(time) => time, // Sometimes, the timestamp is in seconds.
@@ -112,8 +126,24 @@ async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category
                     println!("cargo:warning=Unknown hitokoto created_at in category {category}, created_at={}.", hitokoto.created_at);
                     0
                 },
-            },
+            }
         ));
+
+        #[cfg(not(feature = "language"))]
+        let _ = language;
+        #[cfg(feature = "language")]
+        rust.push_str(&format!(
+            "language: Language::{},",
+            match language {
+                Some(language) => format!("{language:?}"),
+                None => {
+                    println!("cargo:warning=Unknown hitokoto language in category {category}, hitokoto={:?}.", hitokoto.hitokoto);
+                    "Chinese".to_string()
+                },
+            }
+        ));
+
+        rust.push_str("},\n");
     }
     rust.push_str("];");
     let file_path = format!("{out_dir}/sentences_{category}.rs");

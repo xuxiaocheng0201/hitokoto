@@ -1,7 +1,7 @@
 use crate::{Hitokoto, HitokotoType};
 
 bitflags::bitflags! {
-    /// [Hitokoto] types set.
+    /// [Hitokoto type](HitokotoType) set.
     #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
     #[cfg_attr(docsrs, doc(cfg(feature = "random")))]
     pub struct HitokotoTypes: u16 {

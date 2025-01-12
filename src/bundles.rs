@@ -3,6 +3,8 @@
 
 use alloc::borrow::Cow;
 use crate::{Hitokoto, HitokotoType};
+#[cfg(feature = "language")]
+use crate::Language;
 
 include!(concat!(env!("OUT_DIR"), "/sentences_a.rs"));
 include!(concat!(env!("OUT_DIR"), "/sentences_b.rs"));

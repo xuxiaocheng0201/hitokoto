@@ -9,6 +9,8 @@ extern crate alloc;
 
 mod data;
 pub use data::{Hitokoto, HitokotoType};
+#[cfg(feature = "language")]
+pub use data::Language;
 
 pub mod bundles;
 
