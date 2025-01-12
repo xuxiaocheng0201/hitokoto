@@ -1,6 +1,6 @@
 [package]
 name = "hitokoto"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["xuxiaocheng <2762267080@qq.com>"]
 edition = "2021"
 description = "一言 https://hitokoto.cn/."
