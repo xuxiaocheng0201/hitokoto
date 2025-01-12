@@ -66,7 +66,7 @@ pub struct Hitokoto {
     pub language: Language,
 }
 
-/// This is a copy from [lingua Language](https://crates.io/crates/lingua).
+/// This is a copy from [lingua Language](https://docs.rs/lingua/%5E1.6/lingua/enum.Language.html).
 /// In order to reduce dependencies.
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]

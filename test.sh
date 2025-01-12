@@ -12,6 +12,7 @@ DOCS_RS=1 cargo build --no-default-features --features std,random
 DOCS_RS=1 cargo build --no-default-features --features std,time
 DOCS_RS=1 cargo build --no-default-features --features std,language
 DOCS_RS=1 cargo build --no-default-features --features std,uuid,serde,random,time,language
+DOCS_RS=1 cargo build --no-default-features --features std,uuid,serde,random,time,language --target wasm32-wasip1
 
 DOCS_RS=1 cargo test --features std,uuid,serde,random,time,language
 cargo test --features std,uuid,serde,random,time,language
