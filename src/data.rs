@@ -68,6 +68,27 @@ pub struct Hitokoto {
 
 /// This is a copy from [lingua Language](https://docs.rs/lingua/%5E1.6/lingua/enum.Language.html).
 /// In order to reduce dependencies.
+///
+/// In hitokoto sentences v1.0.399, the count of languages are as follows:
+/// ```text
+/// Bokmal: 2
+/// German: 3
+/// Dutch: 1
+/// Albanian: 1
+/// Latin: 4
+/// Romanian: 1
+/// Korean: 1
+/// Ganda: 1
+/// Japanese: 48
+/// Finnish: 1
+/// Tswana: 1
+/// French: 2
+/// Chinese: 6795
+/// Italian: 1
+/// Afrikaans: 2
+/// English: 123
+/// Bosnian: 1
+/// ```
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[cfg(feature = "language")]
