@@ -1,7 +1,9 @@
 use crate::{Hitokoto, HitokotoType};
 
 bitflags::bitflags! {
+    /// [Hitokoto] types set.
     #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
+    #[cfg_attr(docsrs, doc(cfg(feature = "random")))]
     pub struct HitokotoTypes: u16 {
         /// 动画
         const Anime = 1 << 0;
@@ -59,11 +61,19 @@ impl<T: IntoIterator<Item=HitokotoType>> From<T> for HitokotoTypes {
     }
 }
 
+/// Generate a random `usize` in `0..total`.
+fn generate_random(total: usize) -> usize {
+    #[cfg(feature = "std")] let mut random = rand::thread_rng();
+    #[cfg(not(feature = "std"))] let mut random = rand::rngs::OsRng;
+    rand::Rng::gen_range(&mut random, 0..total)
+}
+
 /// This is equivalent to requesting 'https://v1.hitokoto.cn/?c='
 ///
 /// # Panic
 /// If `types` is empty, this function will panic.
 // https://developer.hitokoto.cn/sentence/demo.html
+#[cfg_attr(docsrs, doc(cfg(feature = "random")))]
 pub fn random_hitokoto(types: HitokotoTypes) -> Hitokoto {
     assert_ne!(types, HitokotoTypes::empty(), "Random hitokoto types should not be empty.");
     let a_len = if types.contains(HitokotoTypes::Anime) { crate::bundles::HITOKOTOS_A.len() } else { 0 };
@@ -79,7 +89,7 @@ pub fn random_hitokoto(types: HitokotoTypes) -> Hitokoto {
     let k_len = if types.contains(HitokotoTypes::Philosophy) { crate::bundles::HITOKOTOS_K.len() } else { 0 };
     let l_len = if types.contains(HitokotoTypes::Funny) { crate::bundles::HITOKOTOS_L.len() } else { 0 };
     let total_len = a_len + b_len + c_len + d_len + e_len + f_len + g_len + h_len + i_len + j_len + k_len + l_len;
-    let mut random_index = rand::Rng::gen_range(&mut rand::thread_rng(), 0..total_len);
+    let mut random_index = generate_random(total_len);
     if random_index < a_len { return crate::bundles::HITOKOTOS_A[random_index].clone(); } random_index -= a_len;
     if random_index < b_len { return crate::bundles::HITOKOTOS_B[random_index].clone(); } random_index -= b_len;
     if random_index < c_len { return crate::bundles::HITOKOTOS_C[random_index].clone(); } random_index -= c_len;
@@ -93,4 +103,12 @@ pub fn random_hitokoto(types: HitokotoTypes) -> Hitokoto {
     if random_index < k_len { return crate::bundles::HITOKOTOS_K[random_index].clone(); } random_index -= k_len;
     if random_index < l_len { return crate::bundles::HITOKOTOS_L[random_index].clone(); } random_index -= l_len;
     unreachable!("This should a bug. types={types:?}, rest_random={random_index}");
+}
+
+/// This is an optional version for [random_hitokoto], with no panic.
+/// If the types is empty, it will return None.
+#[inline]
+pub fn random_hitokoto_option(types: HitokotoTypes) -> Option<Hitokoto> {
+    if types.is_empty() { return None; }
+    Some(random_hitokoto(types))
 }

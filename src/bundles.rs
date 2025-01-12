@@ -1,6 +1,7 @@
 //! This is the bundled sentences from [sentences-bundle.hitokoto.cn](https://sentences-bundle.hitokoto.cn/).
+#![allow(unused_imports)]
 
-use std::borrow::Cow;
+use alloc::borrow::Cow;
 use crate::{Hitokoto, HitokotoType};
 
 include!(concat!(env!("OUT_DIR"), "/sentences_a.rs"));

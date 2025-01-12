@@ -1,5 +1,6 @@
-use std::borrow::Cow;
+use alloc::borrow::Cow;
 
+/// Hitokoto type.
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum HitokotoType {
@@ -29,6 +30,7 @@ pub enum HitokotoType {
     Funny,
 }
 
+/// Hitokoto data.
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Hitokoto {
