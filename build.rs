@@ -3,21 +3,22 @@ async fn main() -> anyhow::Result<()> {
     let base_url = std::env::var("HITOKOTO_BASE_URL")
         .unwrap_or("https://sentences-bundle.hitokoto.cn".to_string());
     let out_dir = std::env::var("OUT_DIR")?;
+    let client = reqwest::Client::new();
 
     // https://sentences-bundle.hitokoto.cn/categories.json
     let (a, b, c, d, e, f, g, h, i, j, k, l) = tokio::try_join!(
-        handle_hitokoto(&base_url, &out_dir, 'a', "Anime - 动画"),
-        handle_hitokoto(&base_url, &out_dir, 'b', "Comic - 漫画"),
-        handle_hitokoto(&base_url, &out_dir, 'c', "Game - 游戏"),
-        handle_hitokoto(&base_url, &out_dir, 'd', "Literature - 文学。主要收录现代文学：小说、散文、戏剧。"),
-        handle_hitokoto(&base_url, &out_dir, 'e', "Original - 原创"),
-        handle_hitokoto(&base_url, &out_dir, 'f', "Internet - 来自网络"),
-        handle_hitokoto(&base_url, &out_dir, 'g', "Other - 其他"),
-        handle_hitokoto(&base_url, &out_dir, 'h', "Video - 影视"),
-        handle_hitokoto(&base_url, &out_dir, 'i', "Poem - 诗词。主要收录中国古代文学，如：诗、歌、词、赋、曲等。"),
-        handle_hitokoto(&base_url, &out_dir, 'j', "NCM - 网易云。主要收录网易云音乐热评。"),
-        handle_hitokoto(&base_url, &out_dir, 'k', "Philosophy - 哲学"),
-        handle_hitokoto(&base_url, &out_dir, 'l', "Funny - 抖机灵"),
+        handle_hitokoto(&client, &base_url, &out_dir, 'a', "Anime - 动画"),
+        handle_hitokoto(&client, &base_url, &out_dir, 'b', "Comic - 漫画"),
+        handle_hitokoto(&client, &base_url, &out_dir, 'c', "Game - 游戏"),
+        handle_hitokoto(&client, &base_url, &out_dir, 'd', "Literature - 文学。主要收录现代文学：小说、散文、戏剧。"),
+        handle_hitokoto(&client, &base_url, &out_dir, 'e', "Original - 原创"),
+        handle_hitokoto(&client, &base_url, &out_dir, 'f', "Internet - 来自网络"),
+        handle_hitokoto(&client, &base_url, &out_dir, 'g', "Other - 其他"),
+        handle_hitokoto(&client, &base_url, &out_dir, 'h', "Video - 影视"),
+        handle_hitokoto(&client, &base_url, &out_dir, 'i', "Poem - 诗词。主要收录中国古代文学，如：诗、歌、词、赋、曲等。"),
+        handle_hitokoto(&client, &base_url, &out_dir, 'j', "NCM - 网易云。主要收录网易云音乐热评。"),
+        handle_hitokoto(&client, &base_url, &out_dir, 'k', "Philosophy - 哲学"),
+        handle_hitokoto(&client, &base_url, &out_dir, 'l', "Funny - 抖机灵"),
     )?;
     if a || b || c || d || e || f || g || h || i || j || k || l {
         println!("cargo:warning=If you see any warning, please report this bug to https://github.com/xuxiaocheng0201/hitokoto/ .");
@@ -42,11 +43,13 @@ pub struct Hitokoto {
     pub created_at: String,
 }
 
-async fn handle_hitokoto(base_url: &str, out_dir: &str, category: char, category_doc: &str) -> anyhow::Result<bool> {
+async fn handle_hitokoto(client: &reqwest::Client, base_url: &str, out_dir: &str, category: char, category_doc: &str) -> anyhow::Result<bool> {
     let list = if option_env!("DOCS_RS") != Some("1") {
         use anyhow::Context;
         let url = format!("{base_url}/sentences/{category}.json");
-        reqwest::get(url).await?.json::<Vec<Hitokoto>>().await.context(format!("decode {category}"))?
+        client.get(url)
+            .send().await?.error_for_status()?
+            .json::<Vec<Hitokoto>>().await.context(format!("receive and decode {category}"))?
     } else {
         // This is for building on docs.rs with no web requests.
         println!("cargo:rerun-if-env-changed=DOCS_RS");
