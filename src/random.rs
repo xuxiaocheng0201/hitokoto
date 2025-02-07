@@ -63,9 +63,9 @@ impl<T: IntoIterator<Item=HitokotoType>> From<T> for HitokotoTypes {
 
 /// Generate a random `usize` in `0..total`.
 fn generate_random(total: usize) -> usize {
-    #[cfg(feature = "std")] let mut random = rand::thread_rng();
-    #[cfg(not(feature = "std"))] let mut random = rand::rngs::OsRng;
-    rand::Rng::gen_range(&mut random, 0..total)
+    #[cfg(feature = "std")] let mut random = rand::rng();
+    #[cfg(not(feature = "std"))] let mut random = <rand::rngs::SmallRng as rand::SeedableRng>::from_os_rng();
+    rand::Rng::random_range(&mut random, 0..total)
 }
 
 /// This is equivalent to requesting '<https://v1.hitokoto.cn/?c=>'
@@ -106,7 +106,7 @@ pub fn random_hitokoto(types: HitokotoTypes) -> Hitokoto {
 }
 
 /// This is an optional version for [random_hitokoto], with no panic.
-/// If the types is empty, it will return None.
+/// If the types are empty, it will return None.
 #[inline]
 #[cfg_attr(docsrs, doc(cfg(feature = "random")))]
 pub fn random_hitokoto_option(types: HitokotoTypes) -> Option<Hitokoto> {

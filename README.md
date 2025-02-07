@@ -17,4 +17,5 @@
 1. 构建时自动下载并捆绑所有一言
 2. 支持随机选择，与访问 https://v1.hitokoto.cn/?c= 相同
 3. 在 API 的基础上扩展支持了语言，使用 [lingua](https://crates.io/crates/lingua) 库在构建时自动识别 (需要 `language` feature)
-4. 支持 no_std 和 wasm
+4. 支持 no_std
+5. 支持 wasm (如果启用了 random feature，需要 `wasm` feature 和 `RUSTFLAGS='--cfg getrandom_backend="wasm_js"'`)
