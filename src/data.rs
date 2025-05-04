@@ -81,7 +81,7 @@ pub enum HitokotoCommitFrom {
 }
 
 /// This is a copy from [lingua Language](https://docs.rs/lingua/%5E1.6/lingua/enum.Language.html).
-/// In order to reduce dependencies.
+/// For reducing dependencies in the final product.
 ///
 /// In hitokoto sentences v1.0.399, the count of languages are as follows:
 /// ```text
