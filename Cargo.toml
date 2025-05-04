@@ -16,7 +16,6 @@ serde = { version = "^1.0", optional = true, default-features = false, features 
 rand = { version = "~0.9", optional = true, default-features = false, features = ["os_rng", "small_rng"] }
 bitflags = { version = "^2.9", optional = true, default-features = false }
 chrono = { version = "~0.4", optional = true, default-features = false }
-getrandom = { version = "0.3", optional = true, features = ["wasm_js"] }
 
 [build-dependencies]
 anyhow = "^1.0"
@@ -37,7 +36,6 @@ serde = ["dep:serde", "uuid?/serde", "chrono?/serde"]
 random = ["dep:rand", "dep:bitflags"]
 time = ["dep:chrono"]
 language = ["dep:lingua"]
-wasm = ["dep:getrandom"]
 
 [package.metadata.docs.rs]
 all-features = true
