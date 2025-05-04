@@ -76,32 +76,32 @@ fn generate_random(total: usize) -> usize {
 #[cfg_attr(docsrs, doc(cfg(feature = "random")))]
 pub fn random_hitokoto(types: HitokotoTypes) -> Hitokoto {
     assert_ne!(types, HitokotoTypes::empty(), "Random hitokoto types should not be empty.");
-    let a_len = if types.contains(HitokotoTypes::Anime) { crate::bundles::HITOKOTOS_A.len() } else { 0 };
-    let b_len = if types.contains(HitokotoTypes::Comic) { crate::bundles::HITOKOTOS_B.len() } else { 0 };
-    let c_len = if types.contains(HitokotoTypes::Game) { crate::bundles::HITOKOTOS_C.len() } else { 0 };
-    let d_len = if types.contains(HitokotoTypes::Literature) { crate::bundles::HITOKOTOS_D.len() } else { 0 };
-    let e_len = if types.contains(HitokotoTypes::Original) { crate::bundles::HITOKOTOS_E.len() } else { 0 };
-    let f_len = if types.contains(HitokotoTypes::Internet) { crate::bundles::HITOKOTOS_F.len() } else { 0 };
-    let g_len = if types.contains(HitokotoTypes::Other) { crate::bundles::HITOKOTOS_G.len() } else { 0 };
-    let h_len = if types.contains(HitokotoTypes::Video) { crate::bundles::HITOKOTOS_H.len() } else { 0 };
-    let i_len = if types.contains(HitokotoTypes::Poem) { crate::bundles::HITOKOTOS_I.len() } else { 0 };
-    let j_len = if types.contains(HitokotoTypes::NCM) { crate::bundles::HITOKOTOS_J.len() } else { 0 };
-    let k_len = if types.contains(HitokotoTypes::Philosophy) { crate::bundles::HITOKOTOS_K.len() } else { 0 };
-    let l_len = if types.contains(HitokotoTypes::Funny) { crate::bundles::HITOKOTOS_L.len() } else { 0 };
+    let a_len = if types.contains(HitokotoTypes::Anime) { crate::bundles::HITOKOTO_A.len() } else { 0 };
+    let b_len = if types.contains(HitokotoTypes::Comic) { crate::bundles::HITOKOTO_B.len() } else { 0 };
+    let c_len = if types.contains(HitokotoTypes::Game) { crate::bundles::HITOKOTO_C.len() } else { 0 };
+    let d_len = if types.contains(HitokotoTypes::Literature) { crate::bundles::HITOKOTO_D.len() } else { 0 };
+    let e_len = if types.contains(HitokotoTypes::Original) { crate::bundles::HITOKOTO_E.len() } else { 0 };
+    let f_len = if types.contains(HitokotoTypes::Internet) { crate::bundles::HITOKOTO_F.len() } else { 0 };
+    let g_len = if types.contains(HitokotoTypes::Other) { crate::bundles::HITOKOTO_G.len() } else { 0 };
+    let h_len = if types.contains(HitokotoTypes::Video) { crate::bundles::HITOKOTO_H.len() } else { 0 };
+    let i_len = if types.contains(HitokotoTypes::Poem) { crate::bundles::HITOKOTO_I.len() } else { 0 };
+    let j_len = if types.contains(HitokotoTypes::NCM) { crate::bundles::HITOKOTO_J.len() } else { 0 };
+    let k_len = if types.contains(HitokotoTypes::Philosophy) { crate::bundles::HITOKOTO_K.len() } else { 0 };
+    let l_len = if types.contains(HitokotoTypes::Funny) { crate::bundles::HITOKOTO_L.len() } else { 0 };
     let total_len = a_len + b_len + c_len + d_len + e_len + f_len + g_len + h_len + i_len + j_len + k_len + l_len;
     let mut random_index = generate_random(total_len);
-    if random_index < a_len { return crate::bundles::HITOKOTOS_A[random_index].clone(); } random_index -= a_len;
-    if random_index < b_len { return crate::bundles::HITOKOTOS_B[random_index].clone(); } random_index -= b_len;
-    if random_index < c_len { return crate::bundles::HITOKOTOS_C[random_index].clone(); } random_index -= c_len;
-    if random_index < d_len { return crate::bundles::HITOKOTOS_D[random_index].clone(); } random_index -= d_len;
-    if random_index < e_len { return crate::bundles::HITOKOTOS_E[random_index].clone(); } random_index -= e_len;
-    if random_index < f_len { return crate::bundles::HITOKOTOS_F[random_index].clone(); } random_index -= f_len;
-    if random_index < g_len { return crate::bundles::HITOKOTOS_G[random_index].clone(); } random_index -= g_len;
-    if random_index < h_len { return crate::bundles::HITOKOTOS_H[random_index].clone(); } random_index -= h_len;
-    if random_index < i_len { return crate::bundles::HITOKOTOS_I[random_index].clone(); } random_index -= i_len;
-    if random_index < j_len { return crate::bundles::HITOKOTOS_J[random_index].clone(); } random_index -= j_len;
-    if random_index < k_len { return crate::bundles::HITOKOTOS_K[random_index].clone(); } random_index -= k_len;
-    if random_index < l_len { return crate::bundles::HITOKOTOS_L[random_index].clone(); } random_index -= l_len;
+    if random_index < a_len { return crate::bundles::HITOKOTO_A[random_index].clone(); } random_index -= a_len;
+    if random_index < b_len { return crate::bundles::HITOKOTO_B[random_index].clone(); } random_index -= b_len;
+    if random_index < c_len { return crate::bundles::HITOKOTO_C[random_index].clone(); } random_index -= c_len;
+    if random_index < d_len { return crate::bundles::HITOKOTO_D[random_index].clone(); } random_index -= d_len;
+    if random_index < e_len { return crate::bundles::HITOKOTO_E[random_index].clone(); } random_index -= e_len;
+    if random_index < f_len { return crate::bundles::HITOKOTO_F[random_index].clone(); } random_index -= f_len;
+    if random_index < g_len { return crate::bundles::HITOKOTO_G[random_index].clone(); } random_index -= g_len;
+    if random_index < h_len { return crate::bundles::HITOKOTO_H[random_index].clone(); } random_index -= h_len;
+    if random_index < i_len { return crate::bundles::HITOKOTO_I[random_index].clone(); } random_index -= i_len;
+    if random_index < j_len { return crate::bundles::HITOKOTO_J[random_index].clone(); } random_index -= j_len;
+    if random_index < k_len { return crate::bundles::HITOKOTO_K[random_index].clone(); } random_index -= k_len;
+    if random_index < l_len { return crate::bundles::HITOKOTO_L[random_index].clone(); } random_index -= l_len;
     unreachable!("This should a bug. types={types:?}, rest_random={random_index}");
 }
 

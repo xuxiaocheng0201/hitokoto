@@ -113,7 +113,7 @@ async fn real_main() -> anyhow::Result<()> {
 
     let mut rust = String::new();
     rust.push_str("#[doc = \"Visit `https://sentences-bundle.hitokoto.cn/version.json` to check this is the latest version.\"]\n");
-    rust.push_str(&format!("pub fn bundled_version() -> &'static str {{ {version} }}\n\n"));
+    rust.push_str(&format!("pub fn bundled_version() -> &'static str {{ {version:?} }}\n\n"));
     let mut join_set = tokio::task::JoinSet::new();
     for category in categories {
         println!("Getting sentences {} from zip.", category.key);
@@ -171,14 +171,14 @@ impl Sentence {
 
 async fn handle_sentences(category: Category, sentences: Vec<Sentence>) -> anyhow::Result<bool> {
     let mut rust = String::new();
-    rust.push_str(&format!("#[doc = \"Bundled sentences in category {}\"\n]", category.name));
-    rust.push_str("#[doc = \"\"\n]");
-    rust.push_str(&format!("#[doc = \"Description: {}\"\n]", category.desc));
-    rust.push_str(&format!("#[doc = \"Create at: {}\"\n]", category.created_at));
-    rust.push_str(&format!("#[doc = \"Update at: {}\"\n]", category.updated_at));
-    rust.push_str(&format!("#[doc = \"Sentence count: {}\"\n]", sentences.len()));
-    rust.push_str("#[doc = \"\"\n]");
-    rust.push_str(&format!("#[doc = \"Link: https://sentences-bundle.hitokoto.cn/sentences/{}.json\"\n]", category.key));
+    rust.push_str(&format!("#[doc = \"Bundled sentences in category {}\"]\n", category.name));
+    rust.push_str("#[doc = \"\"]\n");
+    rust.push_str(&format!("#[doc = \"Description: {}\"]\n", category.desc));
+    rust.push_str(&format!("#[doc = \"Create at: {}\"]\n", category.created_at));
+    rust.push_str(&format!("#[doc = \"Update at: {}\"]\n", category.updated_at));
+    rust.push_str(&format!("#[doc = \"Sentence count: {}\"]\n", sentences.len()));
+    rust.push_str("#[doc = \"\"]\n");
+    rust.push_str(&format!("#[doc = \"Link: https://sentences-bundle.hitokoto.cn/sentences/{}.json\"]\n", category.key));
     rust.push_str(&format!("pub static HITOKOTO_{}: &[Hitokoto] = &[\n", category.key.to_ascii_uppercase()));
 
     #[cfg(not(feature = "language"))]
