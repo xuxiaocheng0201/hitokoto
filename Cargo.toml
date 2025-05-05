@@ -1,6 +1,6 @@
 [package]
 name = "hitokoto"
-version = "0.5.2"
+version = "0.6.0"
 authors = ["xuxiaocheng <2762267080@qq.com>"]
 edition = "2024"
 rust-version = "1.85.0"
@@ -12,7 +12,7 @@ documentation = "https://docs.rs/hitokoto/"
 keywords = ["hitokoto"]
 
 [dependencies]
-uuid = { version = "^1.15", optional = true, default-features = false }
+uuid = { version = "^1.16", optional = true, default-features = false }
 serde = { version = "^1.0", optional = true, default-features = false, features = ["alloc", "derive"] }
 rand = { version = "~0.9", optional = true, default-features = false, features = ["os_rng", "small_rng"] }
 bitflags = { version = "^2.9", optional = true, default-features = false }
@@ -20,14 +20,14 @@ chrono = { version = "~0.4", optional = true, default-features = false }
 
 [build-dependencies]
 anyhow = "^1.0"
-tokio = { version = "^1.43", features = ["rt-multi-thread", "macros"] }
+tokio = { version = "^1.44", features = ["rt-multi-thread", "macros"] }
 reqwest = { version = "~0.12", features = ["json"] }
 serde_json = "^1.0"
 zip = "^2.6"
 serde = { version = "^1.0", features = ["derive"] }
-uuid = { version = "^1.15", optional = true, features = ["serde"] }
+uuid = { version = "^1.16", optional = true, features = ["serde"] }
 chrono = { version = "~0.4", optional = true }
-lingua = { version = "^1.6", optional = true }
+lingua = { version = "^1.7", optional = true }
 
 [features]
 default = ["std", "random"]

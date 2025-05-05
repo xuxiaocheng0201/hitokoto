@@ -7,18 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2025-5-5
+
+### Changed
+
+* 更新 `lingua` 到 1.7
+* 添加 `bundled_version` 函数
+* 添加 `get_all_hitokoto` 函数
+* 重构模块导出结构
+* 从 `api.github.com` 下载语句包
+
 ## [0.5.2] - 2025-2-7
 
 ### Changed
 
-* 更新 rand 到 0.9
+* 更新 `rand` 到 0.9
 
 ## [0.5.1] - 2025-1-13
 
 ### Added
 
-* commit_from 字段使用枚举
-* 添加 get_hitokoto_by_id 函数
+* `commit_from` 字段使用枚举
+* 添加 `get_hitokoto_by_id` 函数
 
 ## [0.4.0] - 2025-1-13
 
@@ -30,7 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* created_at 字段类型改为 `chrono::DateTime<chrono::Utc>`
+* `created_at` 字段类型改为 `chrono::DateTime<chrono::Utc>`
 
 ## [0.2.2] - 2025-1-12
 
