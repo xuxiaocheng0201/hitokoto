@@ -68,10 +68,14 @@ async fn docs_rs_main() -> anyhow::Result<()> {
 async fn real_main() -> anyhow::Result<()> {
     const USER_AGENT: &str = "hitokoto-rs(https://crates.io/crates/hitokoto)";
 
+    let base_url = std::env::var("GITHUB_API_PREFIX")
+        .unwrap_or("https://api.github.com".to_string());
+    println!("cargo:rerun-if-env-changed=GITHUB_API_PREFIX");
+
     println!("Getting latest tag from Github.");
     let client = reqwest::Client::new();
     let json = client
-        .get("https://api.github.com/repos/hitokoto-osc/sentences-bundle/tags?per_page=1")
+        .get(format!("{base_url}/repos/hitokoto-osc/sentences-bundle/tags?per_page=1"))
         .header("Accept", "application/vnd.github+json")
         .header("User-Agent", USER_AGENT)
         .send().await?
