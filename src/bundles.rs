@@ -10,7 +10,6 @@ include!(concat!(env!("OUT_DIR"), "/sentences.rs"));
 
 /// Get hitokoto by id. If not found, return `None`.
 pub fn get_hitokoto_by_id(id: u32) -> Option<Hitokoto> {
-    bundled_version();
     for h in HITOKOTO_A { if h.id == id { return Some(h.clone()) } }
     for h in HITOKOTO_B { if h.id == id { return Some(h.clone()) } }
     for h in HITOKOTO_C { if h.id == id { return Some(h.clone()) } }

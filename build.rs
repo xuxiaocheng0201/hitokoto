@@ -173,12 +173,12 @@ async fn handle_sentences(category: Category, sentences: Vec<Sentence>) -> anyho
     let mut rust = String::new();
     rust.push_str(&format!("#[doc = \"Bundled sentences in category {}\"]\n", category.name));
     rust.push_str("#[doc = \"\"]\n");
-    rust.push_str(&format!("#[doc = \"Description: {}\"]\n", category.desc));
-    rust.push_str(&format!("#[doc = \"Create at: {}\"]\n", category.created_at));
-    rust.push_str(&format!("#[doc = \"Update at: {}\"]\n", category.updated_at));
-    rust.push_str(&format!("#[doc = \"Sentence count: {}\"]\n", sentences.len()));
+    rust.push_str(&format!("#[doc = \"<p>Description: {}</p>\"]\n", category.desc));
+    rust.push_str(&format!("#[doc = \"<p>Create at: {}</p>\"]\n", category.created_at));
+    rust.push_str(&format!("#[doc = \"<p>Update at: {}</p>\"]\n", category.updated_at));
+    rust.push_str(&format!("#[doc = \"<p>Sentence count: {}</p>\"]\n", sentences.len()));
     rust.push_str("#[doc = \"\"]\n");
-    rust.push_str(&format!("#[doc = \"Link: https://sentences-bundle.hitokoto.cn/sentences/{}.json\"]\n", category.key));
+    rust.push_str(&format!("#[doc = \"Link: [GithubPage](https://sentences-bundle.hitokoto.cn/sentences/{}.json)\"]\n", category.key));
     rust.push_str(&format!("pub static HITOKOTO_{}: &[Hitokoto] = &[\n", category.key.to_ascii_uppercase()));
 
     #[cfg(not(feature = "language"))]
