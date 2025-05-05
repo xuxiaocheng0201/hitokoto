@@ -16,3 +16,5 @@ DOCS_RS=1 cargo build --no-default-features --features std,uuid,serde,random,tim
 
 DOCS_RS=1 cargo test --features std,uuid,serde,random,time,language
 cargo test --features std,uuid,serde,random,time,language
+
+cargo run --example count_languages --features language

@@ -1,10 +1,28 @@
-//! This is the bundled sentences from [sentences-bundle.hitokoto.cn](https://sentences-bundle.hitokoto.cn/).
 #![allow(unused_imports)]
 
 use alloc::borrow::Cow;
 use crate::{Hitokoto, HitokotoType, HitokotoCommitFrom};
 #[cfg(feature = "language")]
 use crate::Language;
+
+/// Get all hitokoto in an iterator.
+pub fn get_all_hitokoto() -> impl Iterator<Item = &'static Hitokoto> {
+    alloc::vec![
+        HITOKOTO_A,
+        HITOKOTO_B,
+        HITOKOTO_C,
+        HITOKOTO_D,
+        HITOKOTO_E,
+        HITOKOTO_F,
+        HITOKOTO_G,
+        HITOKOTO_H,
+        HITOKOTO_I,
+        HITOKOTO_J,
+        HITOKOTO_K,
+        HITOKOTO_L,
+    ].into_iter()
+        .flat_map(|a| a.iter())
+}
 
 include!(concat!(env!("OUT_DIR"), "/sentences.rs"));
 
