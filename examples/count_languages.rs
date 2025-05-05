@@ -6,7 +6,9 @@ fn main() {
             *languages.entry(sentence.language).or_insert(0usize) += 1;
         }
         let mut languages = languages.into_iter().collect::<Vec<_>>();
-        languages.sort_by(|(_, a), (_, b)| Ord::cmp(a, b).reverse());
+        languages.sort_by(|(al, a), (bl, b)|
+            Ord::cmp(a, b).reverse().then(Ord::cmp(&format!("{al:?}"), &format!("{bl:?}")))
+        );
         for (language, count) in languages {
             println!("{:?}: {}", language, count);
         }
