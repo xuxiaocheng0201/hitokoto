@@ -23,6 +23,7 @@ jobs:
       - name: Run test
         run: |
           sudo chmod +x ./test.sh
+          rustup target add wasm32-wasip1 
           ./test.sh
 
   verify-msrv:
@@ -31,6 +32,9 @@ jobs:
     steps:
       - name: Install cargo-msrv
         run: cargo install cargo-msrv --locked
+
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Verify msrv
         run: cargo msrv verify
