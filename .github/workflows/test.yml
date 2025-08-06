@@ -30,11 +30,13 @@ jobs:
     name: Verify MSRV
     runs-on: ubuntu-latest
     steps:
-      - name: Install cargo-msrv
-        run: cargo install cargo-msrv --locked
-
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Install cargo-msrv
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-msrv
 
       - name: Verify msrv
         run: cargo msrv verify
