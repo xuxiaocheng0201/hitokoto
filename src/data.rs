@@ -86,11 +86,11 @@ pub enum HitokotoCommitFrom {
 /// If you want more language types,
 /// please use `language-full` feature instead of `language` feature.
 ///
-/// In hitokoto sentences v1.0.423, the count of languages are as follows:
+/// In hitokoto sentences v1.0.425, lingua v1.7.2, the count of languages are as follows:
 /// ```text
-/// Chinese: 6964
-/// English: 136
-/// Japanese: 49
+/// Chinese: 7015
+/// English: 137
+/// Japanese: 51
 /// German: 5
 /// French: 4
 /// Spanish: 2
@@ -118,10 +118,10 @@ pub enum Language {
 /// If you want less language types,
 /// please use `language` feature instead of `language-full` feature.
 ///
-/// In hitokoto sentences v1.0.423, the count of languages are as follows:
+/// In hitokoto sentences v1.0.425, lingua v1.7.2, the count of languages are as follows:
 /// ```text
-/// Chinese: 6963
-/// English: 125
+/// Chinese: 7016
+/// English: 126
 /// Japanese: 50
 /// Latin: 5
 /// German: 3
